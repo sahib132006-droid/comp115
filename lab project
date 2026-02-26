@@ -1,0 +1,122 @@
+import turtle
+import random
+
+wn = turtle.Screen()
+wn.setup(900, 900)
+wn.bgcolor("black")
+
+alex = turtle.Turtle()
+alex.speed(0)
+alex.hideturtle()
+alex.penup()
+
+alex.color("white")
+
+for i in range(250):
+    x = random.randint(-420, 420)
+    y = random.randint(-420, 420)
+    alex.goto(x, y)
+
+    star_type = random.randint(1, 10)
+
+    if star_type <= 6:
+        alex.dot(2)      
+    elif star_type <= 9:
+        alex.dot(4)      
+    else:
+        alex.dot(6)      
+
+def draw_circle(x, y, radius, color):
+    alex.penup()
+    alex.goto(x, y - radius)
+    alex.setheading(0)
+    alex.pendown()
+    alex.color(color)
+    alex.begin_fill()
+    alex.circle(radius)
+    alex.end_fill()
+    alex.penup()
+
+def draw_orbit(radius):
+    alex.penup()
+    alex.goto(0, -radius)
+    alex.setheading(0)
+    alex.pendown()
+    alex.color("white")
+    alex.pensize(1)
+    alex.circle(radius)
+    alex.penup()
+#This draws the sun and the Glow    
+draw_circle(0, 0, 85, "darkorange")
+draw_circle(0, 0, 70, "orange")
+draw_circle(0, 0, 55, "yellow")
+
+#This draws the Orbits 
+orbits = [120, 170, 220, 270, 330, 380, 430, 460]
+
+for r in orbits:
+    draw_orbit(r)
+#This draws Mercury 
+alex.goto(0, 0)
+alex.setheading(20)
+alex.forward(120)
+draw_circle(alex.xcor(), alex.ycor(), 8, "gray")
+#This draws Venus 
+alex.goto(0, 0)
+alex.setheading(120)
+alex.forward(170)
+draw_circle(alex.xcor(), alex.ycor(), 19, "gold")
+#This draws Earth 
+alex.goto(0, 0)
+alex.setheading(250)
+alex.forward(220)
+earth_x = alex.xcor()
+earth_y = alex.ycor()
+
+draw_circle(earth_x, earth_y, 20, "blue")
+draw_circle(earth_x + 6, earth_y + 4, 6, "green")
+draw_circle(earth_x - 7, earth_y - 5, 5, "green")
+
+# This is what draws Mars
+alex.goto(0, 0)
+alex.setheading(60)
+alex.forward(270)
+draw_circle(alex.xcor(), alex.ycor(), 11, "red")
+
+# This draws jupiter 
+alex.goto(0, 0)
+alex.setheading(180)
+alex.forward(330)
+draw_circle(alex.xcor(), alex.ycor(), 55, "orange")
+
+# This draws saturn 
+alex.goto(0, 0)
+alex.setheading(300)
+alex.forward(380)
+sat_x = alex.xcor()
+sat_y = alex.ycor()
+
+draw_circle(sat_x, sat_y, 48, "khaki")
+
+# Saturn ring
+alex.goto(sat_x, sat_y - 70)
+alex.setheading(0)
+alex.pendown()
+alex.pensize(6)
+alex.color("wheat")
+alex.circle(70)
+alex.penup()
+
+# This draws Uranus 
+alex.goto(0, 0)
+alex.setheading(40)
+alex.forward(430)
+draw_circle(alex.xcor(), alex.ycor(), 28, "turquoise")
+
+# This draws Neptune 
+alex.goto(0, 0)
+alex.setheading(140)
+alex.forward(460)
+draw_circle(alex.xcor(), alex.ycor(), 27, "royalblue")
+
+wn.mainloop()
