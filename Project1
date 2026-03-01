@@ -1,0 +1,342 @@
+import turtle
+import random
+import math
+
+
+
+
+wn = turtle.Screen()
+wn.setup(900, 900)
+wn.bgcolor("black")
+wn.tracer(0)
+
+
+
+
+bg = turtle.Turtle()
+bg.hideturtle()
+bg.speed(0)
+bg.penup()
+
+
+
+
+def draw_star(x, y, size):
+    bg.goto(x, y)
+    bg.setheading(0)
+    bg.pendown()
+    bg.color("cyan")
+    bg.pensize(1)
+    for _ in range(8):
+        bg.forward(size)
+        bg.backward(size)
+        bg.left(45)
+    bg.penup()
+    bg.goto(x, y)
+    bg.dot(2, "white")
+
+
+
+
+for i in range(350):
+    x = random.randint(-430, 430)
+    y = random.randint(-430, 430)
+    if random.random() < 0.85:
+        bg.goto(x, y)
+        bg.color("skyblue")
+        bg.dot(1)
+    else:
+        draw_star(x, y, random.randint(2, 4))
+
+
+
+
+def draw_circle_on(t, x, y, radius, color):
+    t.goto(x, y - radius)
+    t.setheading(0)
+    t.pendown()
+    t.color(color)
+    t.begin_fill()
+    t.circle(radius)
+    t.end_fill()
+    t.penup()
+
+
+
+
+def draw_orbit(radius):
+    bg.goto(0, -radius)
+    bg.setheading(0)
+    bg.pendown()
+    bg.color("dimgray")
+    bg.pensize(1)
+    bg.circle(radius)
+    bg.penup()
+
+
+
+
+draw_circle_on(bg, 0, 0, 75, "darkorange")
+draw_circle_on(bg, 0, 0, 60, "orange")
+draw_circle_on(bg, 0, 0, 45, "yellow")
+
+
+
+
+ORBIT_RADII = [95, 135, 175, 215, 265, 305, 345, 385]
+for r in ORBIT_RADII:
+    draw_orbit(r)
+
+
+
+
+PLANETS = [
+    ("mercury",  95,  5,  "gray",       4.7,  20),
+    ("venus",   135,  9,  "gold",       3.5, 120),
+    ("earth",   175, 10,  "royalblue",  3.0, 250),
+    ("mars",    215,  7,  "firebrick",  2.4,  60),
+    ("jupiter", 265, 20,  "orange",     1.3, 180),
+    ("saturn",  305, 18,  "khaki",      1.0, 300),
+    ("uranus",  345, 12,  "turquoise",  0.7,  40),
+    ("neptune", 385, 12,  "royalblue",  0.5, 140),
+]
+
+
+
+
+planet_turtles = {}
+angles = {}
+
+
+
+
+for name, orbit_r, planet_r, color, speed, start in PLANETS:
+    t = turtle.Turtle()
+    t.hideturtle()
+    t.penup()
+    planet_turtles[name] = t
+    angles[name] = start
+
+
+
+
+earth_c1 = turtle.Turtle(); earth_c1.hideturtle(); earth_c1.penup()
+earth_c2 = turtle.Turtle(); earth_c2.hideturtle(); earth_c2.penup()
+
+
+saturn_ring_back = turtle.Turtle(); saturn_ring_back.hideturtle(); saturn_ring_back.penup()
+saturn_ring_front = turtle.Turtle(); saturn_ring_front.hideturtle(); saturn_ring_front.penup()
+
+
+
+
+def draw_ellipse_arc(t, cx, cy, rx, ry, start_deg, end_deg, color, pensize, steps=80):
+    t.pensize(pensize)
+    t.color(color)
+    first = True
+    step = (end_deg - start_deg) / steps
+    for i in range(steps + 1):
+        angle = math.radians(start_deg + i * step)
+        x = cx + rx * math.cos(angle)
+        y = cy + ry * math.sin(angle)
+        if first:
+            t.penup()
+            t.goto(x, y)
+            t.pendown()
+            first = False
+        else:
+            t.goto(x, y)
+    t.penup()
+
+
+
+
+RING_BANDS = [
+    (2.20, 0.52, "#c8a96e", 5),
+    (2.05, 0.49, "#e8d090", 4),
+    (1.90, 0.46, "#a07840", 3),
+    (1.78, 0.43, "#dfc47a", 5),
+    (1.62, 0.40, "#c8a050", 4),
+    (1.50, 0.37, "#e8d898", 3),
+    (1.38, 0.34, "#907030", 2),
+]
+
+
+
+
+def draw_saturn_rings_back(cx, cy, planet_r):
+    saturn_ring_back.clear()
+    for rx_f, ry_f, color, ps in RING_BANDS:
+        draw_ellipse_arc(saturn_ring_back, cx, cy,
+                         planet_r * rx_f, planet_r * ry_f,
+                         180, 360, color, ps)
+
+
+
+
+def draw_saturn_rings_front(cx, cy, planet_r):
+    saturn_ring_front.clear()
+    for rx_f, ry_f, color, ps in RING_BANDS:
+        draw_ellipse_arc(saturn_ring_front, cx, cy,
+                         planet_r * rx_f, planet_r * ry_f,
+                         0, 180, color, ps)
+
+
+
+
+def place_circle(t, x, y, r, color):
+    t.clear()
+    t.goto(x, y - r)
+    t.setheading(0)
+    t.pendown()
+    t.color(color)
+    t.begin_fill()
+    t.circle(r)
+    t.end_fill()
+    t.penup()
+
+
+
+
+ufo = turtle.Turtle(); ufo.hideturtle(); ufo.penup()
+ufo_lights = turtle.Turtle(); ufo_lights.hideturtle(); ufo_lights.penup()
+ufo_beam = turtle.Turtle(); ufo_beam.hideturtle(); ufo_beam.penup()
+ufo_angle = 0
+
+
+
+
+def draw_ellipse(t, cx, cy, rx, ry, color):
+    t.goto(cx - rx, cy)
+    t.setheading(0)
+    t.color(color)
+    t.begin_fill()
+    t.pendown()
+    for i in range(60):
+        angle = math.radians(i * 6)
+        x = cx + rx * math.cos(angle)
+        y = cy + ry * math.sin(angle)
+        t.goto(x, y)
+    t.end_fill()
+    t.penup()
+
+
+
+
+# ── UFO Label (static — drawn once on bg) ────────────────────────
+# Arrow and text are redrawn each frame so they follow the UFO hover
+ufo_label = turtle.Turtle(); ufo_label.hideturtle(); ufo_label.penup()
+
+
+def draw_ufo_label(ufo_x, ufo_y):
+    ufo_label.clear()
+
+
+    # Arrow starts to the left of the UFO and points toward it
+    arrow_start_x = ufo_x - 80
+    arrow_start_y = ufo_y + 30
+
+
+    # Draw "Conspiracy??" text at the start of the arrow
+    ufo_label.goto(arrow_start_x - 10, arrow_start_y + 10)
+    ufo_label.color("white")
+    ufo_label.write("Conspiracy??", align="right", font=("Arial", 11, "bold"))
+
+
+    # Draw arrow line
+    ufo_label.goto(arrow_start_x, arrow_start_y)
+    ufo_label.pendown()
+    ufo_label.color("white")
+    ufo_label.pensize(2)
+    ufo_label.goto(ufo_x - 32, ufo_y + 6)
+    ufo_label.penup()
+
+
+    # Draw arrowhead pointing right toward the UFO
+    ufo_label.goto(ufo_x - 32, ufo_y + 6)
+    ufo_label.setheading(0)  # pointing right
+    ufo_label.pendown()
+    ufo_label.color("white")
+    ufo_label.begin_fill()
+    ufo_label.left(150)
+    ufo_label.forward(10)
+    ufo_label.right(120)
+    ufo_label.forward(10)
+    ufo_label.right(120)
+    ufo_label.forward(10)
+    ufo_label.end_fill()
+    ufo_label.penup()
+
+
+
+
+def draw_ufo(x, y):
+    ufo.clear()
+    ufo_lights.clear()
+    ufo_beam.clear()
+    ufo_beam.goto(x - 6, y - 12)
+    ufo_beam.color("cyan")
+    ufo_beam.begin_fill()
+    ufo_beam.pendown()
+    ufo_beam.goto(x + 6, y - 12)
+    ufo_beam.goto(x + 18, y - 45)
+    ufo_beam.goto(x - 18, y - 45)
+    ufo_beam.goto(x - 6, y - 12)
+    ufo_beam.end_fill()
+    ufo_beam.penup()
+    draw_ellipse(ufo, x, y, 28, 8, "silver")
+    draw_ellipse(ufo, x, y + 6, 12, 6, "lightblue")
+    for i in range(8):
+        angle = math.radians(i * 45)
+        lx = x + 24 * math.cos(angle)
+        ly = y + 4 * math.sin(angle)
+        ufo_lights.goto(lx, ly)
+        ufo_lights.dot(4, "yellow")
+
+
+
+
+def animate():
+    global ufo_angle
+
+
+    for name, orbit_r, planet_r, color, speed, _ in PLANETS:
+        angles[name] = (angles[name] + speed) % 360
+        rad = math.radians(angles[name])
+        px = orbit_r * math.cos(rad)
+        py = orbit_r * math.sin(rad)
+
+
+        t = planet_turtles[name]
+
+
+        if name == "earth":
+            place_circle(t, px, py, planet_r, color)
+            place_circle(earth_c1, px + 3, py + 2, 3, "green")
+            place_circle(earth_c2, px - 3, py - 2, 2, "green")
+
+
+        elif name == "saturn":
+            draw_saturn_rings_back(px, py, planet_r)
+            place_circle(t, px, py, planet_r, color)
+            draw_saturn_rings_front(px, py, planet_r)
+
+
+        else:
+            place_circle(t, px, py, planet_r, color)
+
+
+    ufo_angle += 2
+    hover_y = 240 + math.sin(math.radians(ufo_angle)) * 6
+    draw_ufo(250, hover_y)
+    draw_ufo_label(250, hover_y)  # label tracks the UFO hover
+
+
+    wn.update()
+    wn.ontimer(animate, 30)
+
+
+
+
+animate()
+wn.mainloop()
