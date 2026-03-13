@@ -1,0 +1,148 @@
+"""
+Lab 8 - Set and Dict
+Author: <Sahib>
+"""
+
+def remove_duplicates(s):
+    res = ''
+    for c in s:
+        if c not in res:
+            res += c
+    return res
+
+assert remove_duplicates("apple") == "aple"
+assert remove_duplicates("Popsipple") == "Popsile"
+
+
+# Exercise 1
+def remove_duplicates_set(s):
+    """
+    Remove duplicate characters from a string using a set.
+    """
+    res = ""
+    seen_set = set()
+
+    for c in s:
+        if c not in seen_set:
+            res += c
+            seen_set.add(c)
+
+    return res
+
+
+# Your unit tests
+assert remove_duplicates_set("apple") == "aple"
+assert remove_duplicates_set("Popsipple") == "Popsile"
+assert remove_duplicates_set("pear") == "pear"
+
+
+# Exercise 2
+def gem_counting(stones, gems):
+    """
+    Count how many stones are gems.
+    """
+    gem_set = set(gems)
+    count = 0
+
+    for s in stones:
+        if s in gem_set:
+            count += 1
+
+    return count
+
+
+# Your unit tests
+assert gem_counting("abDFMdm", "admMQq") == 4
+assert gem_counting("abDFMdm", "af") == 1
+assert gem_counting("awCcM", "cQqW") == 1
+assert gem_counting("bFfL", "cQqW") == 0
+
+
+# Exercise 3
+def students_id(ids):
+    """
+    Return the number of unique student IDs.
+    """
+    unique_ids = set(ids)
+    return len(unique_ids)
+
+
+# Your unit tests
+assert students_id(['002','003','001','004','012']) == 5
+assert students_id(['002','003','001','012','003','001']) == 4
+
+
+# Exercise 4
+def students_id_occurrences(ids):
+    """
+    Return occurrences of each student ID in a dictionary.
+    """
+    id_dict = {}
+
+    for i in ids:
+        if i in id_dict:
+            id_dict[i] += 1
+        else:
+            id_dict[i] = 1
+
+    return id_dict
+
+
+# Your unit tests
+assert students_id_occurrences(['002','003','001','004','012']) == {
+    '002':1,'003':1,'001':1,'004':1,'012':1
+}
+
+assert students_id_occurrences(['002','003','001','012','003','001']) == {
+    '002':1,'003':2,'001':2,'012':1
+}
+
+
+# Exercise 5
+import re
+
+def word_frequency(paragraph):
+    """
+    Count the frequency of each word in a paragraph.
+    """
+    words = re.findall(r'\b\w+\b', paragraph)
+
+    freq = {}
+
+    for w in words:
+        if w in freq:
+            freq[w] += 1
+        else:
+            freq[w] = 1
+
+    return freq
+
+
+# Your unit tests
+assert word_frequency("I am alive. I am happy.") == {
+    'I':2,'am':2,'alive':1,'happy':1
+}
+
+assert word_frequency("I do not like water. I like fruits.") == {
+    'I':2,'do':1,'not':1,'like':2,'water':1,'fruits':1
+}
+
+
+import requests
+
+url = "https://api.github.com/search/repositories?q=language:python+sort:stars+stars:>300000"
+
+headers = {"Accept": "application/vnd.github.v3+json"}
+response = requests.get(url, headers=headers)
+
+response_dict = response.json()
+
+
+def id_name_repo_starred_300k(response_dict):
+    repo_dict = {}
+
+    for repo in response_dict["items"]:
+        repo_dict[repo["id"]] = repo["name"]
+
+    return repo_dict
+
