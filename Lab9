@@ -1,0 +1,96 @@
+"""
+Lab 9 - DNA
+
+Name: 
+Due Date: Mar. 20, 2026, 5pm
+"""
+
+import turtle
+
+DNA = {
+    'Human':
+    'ATGGTGCATCTGACTCCTGAGGAGAAGTCTGCCGTTACTGCCCTGTGGGGCAAGGTGAACGTGGATGAAGTTGGTGGTGAG',
+    'Rat':
+    'ATGGTGCACCTGACTGATGCTGAGAAGGCTGCTGTTAATGGCCTGTGGGGAAAGGTGAACCCTGATGATGTTGGTGGCGAG',
+    'Rhesus':
+    'ATGGTGCATCTGACTCCTGAGGAGAAGAATGCCGTCACCACCCTGTGGGGCAAGGTGAACGTGGATGAAGTTGGTGGTGAG',
+    'Chimpanzee':
+    'ATGGTGCACCTGACTCCTGAGGAGAAGTCTGCCGTTACTGCCCTGTGGGGCAAGGTGAACGTGGATGAAGTTGGTGGTGAG'
+}
+
+DNA_TO_CODE_DICT = {
+    'T': '00',
+    'C': '01',
+    'A': '10',
+    'G': '11'
+}
+
+# -------------------------
+# Exercise 1
+# -------------------------
+
+def dna_to_code(dna):
+    coded = ''
+    for base in dna:
+        coded += DNA_TO_CODE_DICT[base]
+    return coded
+
+# Time Complexity:
+# O(n) because we loop through the DNA string once
+
+
+# -------------------------
+# Provided draw functions
+# -------------------------
+
+def draw_0(t):
+    t.right(80)
+    t.forward(20)
+    t.left(80)
+
+
+def draw_1(t):
+    t.left(80)
+    t.forward(20)
+    t.right(80)
+
+
+# -------------------------
+# Exercise 2
+# -------------------------
+
+def draw_coded(coded, color):
+    t = turtle.Turtle()
+    t.penup()
+    t.speed(0)
+    t.goto(-300, -200)
+    t.color(color)
+    t.pendown()
+
+    for bit in coded:
+        if bit == '0':
+            draw_0(t)
+        else:
+            draw_1(t)
+
+
+# -------------------------
+# Exercise 3
+# -------------------------
+
+def visualize(dna, color):
+    code = dna_to_code(dna)
+    draw_coded(code, color)
+
+
+# -------------------------
+# Main (for testing)
+# -------------------------
+
+if __name__ == "__main__":
+    drawing_screen = turtle.Screen()
+    visualize(DNA['Human'], 'red')
+    visualize(DNA['Rat'], 'green')
+    visualize(DNA['Rhesus'], 'blue')
+    visualize(DNA['Chimpanzee'], 'pink')
+    drawing_screen.mainloop()
