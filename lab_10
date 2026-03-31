@@ -1,0 +1,61 @@
+# IMAGE DIM (HALF RGB VALUES)
+def dim_eight_pixels_image():
+    im = Image.open("palette_more_pixels.png")          # open image
+    im_dim = Image.new("RGB", (im.width, im.height))    # create new image
+    for row in range(im.height):                        # loop rows
+        for col in range(im.width):                     # loop columns
+            (r, g, b) = im.getpixel((col, row))         # get pixel
+            r = r // 2                                  # half red
+            g = g // 2                                  # half green
+            b = b // 2                                  # half blue
+            im_dim.putpixel((col, row), (r, g, b))      # set pixel
+    im_dim.save("img1_palette_dim.png")                 # save image
+
+
+# BLUE WASHED IMAGE
+def blue_washed_image():
+    im = Image.open("rick_and_morty.png")               # open image
+    im_blue = Image.new("RGB", (im.width, im.height))   # new image
+    for row in range(im.height):                        # loop rows
+        for col in range(im.width):                     # loop columns
+            (r, g, b) = im.getpixel((col, row))         # get pixel
+            im_blue.putpixel((col, row), (0, 0, b))     # keep blue only
+    im_blue.save("img2_rick_blue_washed.png")           # save image
+
+
+# ALTERNATING BLACK & WHITE LINES
+def create_alternate_lines(width, height):
+    im = Image.new("RGB", (width, height))              # new image
+    for row in range(height):                           # loop rows
+        for col in range(width):                        # loop columns
+            if row % 2 == 0:                            # even row
+                im.putpixel((col, row), (255,255,255))  # white
+            else:
+                im.putpixel((col, row), (0,0,0))        # black
+    im.save("img3_alternate_lines.png")                 # save image
+
+
+# RANDOM NOISE IMAGE
+def create_random_noise(width, height):
+    im = Image.new("RGB", (width, height))              # new image
+    for row in range(height):                           # loop rows
+        for col in range(width):                        # loop columns
+            if random.random() < 0.5:                   # 50% chance
+                im.putpixel((col, row), (255,255,255))  # white
+            else:
+                im.putpixel((col, row), (0,0,0))        # black
+    im.save("img4_random.png")                          # save image
+
+
+# DECODE SECRET IMAGE
+def decode_image():
+    im = Image.open("rick_encoded.png")                 # open image
+    im_secret = Image.new("RGB", (im.width, im.height)) # new image
+    for row in range(im.height):                        # loop rows
+        for col in range(im.width):                     # loop columns
+            (r, g, b) = im.getpixel((col, row))         # get pixel
+            if r % 2 == 1:                              # if red is odd
+                im_secret.putpixel((col,row),(0,0,0))   # black
+            else:
+                im_secret.putpixel((col,row),(255,0,0)) # red
+    im_secret.save("img5_rick_secret.png")              # save image
